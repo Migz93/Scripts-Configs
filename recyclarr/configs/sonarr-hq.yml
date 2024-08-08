@@ -1,0 +1,195 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/recyclarr/recyclarr/master/schemas/config-schema.json
+###################################################################################################
+# Recyclarr Configuration Template: HD Bluray + WEB                                               #
+# Updated: 2023-12-30                                                                             #
+# Documentation: https://recyclarr.dev                                                            #
+# Note: If you are using multiple profiles in a single instance, please read the following        #
+# documentation about file merging:                                                               #
+# https://recyclarr.dev/wiki/yaml/config-examples/#merge-single-instance                          #
+###################################################################################################
+
+# Instance Definition: https://recyclarr.dev/wiki/yaml/config-reference/basic/
+sonarr:
+  sonarr-hq:
+    base_url: http://172.17.0.1:8988
+    api_key: !secret sonarr_hq_api
+    media_naming:
+      series: plex
+      season: default
+      episodes:
+        rename: true
+        standard: default
+        daily: default
+        anime: default
+    quality_definition:
+      type: series
+    quality_profiles:
+      - name: HQ
+        min_format_score: 0
+        reset_unmatched_scores:
+          enabled: true
+        upgrade:
+          allowed: true
+          until_quality: Bluray-2160p Remux
+          until_score: 10000
+        qualities:
+          - name: Bluray-2160p Remux
+          - name: Bluray-2160p
+          - name: WEBDL-2160p
+          - name: WEBRip-2160p
+          - name: HDTV-2160p
+          - name: Bluray-1080p Remux
+          - name: Bluray-1080p
+          - name: WEBDL-1080p
+          - name: WEBRip-1080p
+          - name: HDTV-1080p
+          - name: Bluray-720p
+          - name: WEBDL-720p
+          - name: WEBRip-720p
+          - name: HDTV-720p
+          - name: Other
+            qualities:
+              - Bluray-480p
+              - WEBRip-480p
+              - WEBDL-480p
+              - SDTV
+              - DVD
+    delete_old_custom_formats: true
+    replace_existing_custom_formats: true
+    custom_formats:
+    # Audio
+      - trash_ids:
+          - b6fbafa7942952a13e17e2b1152b539a # ATMOS (Undefined)
+          - 4232a509ce60c4e208d13825b7c06264 # DDPlus ATMOS
+          - 63487786a8b01b7f20dd2bc90dd4a477 # DDPlus
+          - 3fbafa924f361e66fbc6187af82dfa85 # 5.1 Surround
+        assign_scores_to:
+          - name: HQ
+    # HDR
+      - trash_ids:
+          - 17e889ce13117940092308f48b48b45b # HLG
+          - bb019e1cd00f304f80971c965de064dc # HDR (Undefined)
+          - 3e2c4e748b64a1a1118e0ea3f4cf6875 # HDR
+          - 3497799d29a085e2ac2df9d468413c94 # HDR10
+          - a3d82cbef5039f8d295478d28a887159 # HDR10Plus
+        assign_scores_to:
+          - name: HQ
+    # Movie Versions
+      - trash_ids:
+          - 3a4127d8aa781b44120d907f2cd62627 # Hybrid
+          - b735f09d3c025cbb7d75a5d38325b73b # Remaster
+        assign_scores_to:
+          - name: HQ
+    # Release Groups
+      - trash_ids:
+          - 9965a052eb87b0d10313b1cea89eb451 # Remux Tier 01
+          - 8a1d0c3d7497e741736761a1da866a2e # Remux Tier 02
+          - d6819cba26b1a6508138d25fb5e32293 # HD Bluray Tier 01
+          - c2216b7b8aa545dc1ce8388c618f8d57 # HD Bluray Tier 02
+          - e6258996055b9fbab7e9cb2f75819294 # WEB Tier 01
+          - 58790d4e2fdcd9733aa7ae68ba2bb503 # WEB Tier 02
+          - d84935abd3f8556dcd51d4f27e22d0a6 # WEB Tier 03
+          - d0c516558625b04b363fa6c5c2c7cfd4 # WEB Scene
+        assign_scores_to:
+          - name: HQ
+    # Misc
+      - trash_ids:
+          - ec8fa7296b64e8cd390a1600981f3923 # Repack/Proper
+          - eb3d5cc0a2be0db205fb823640db6a3c # Repack v2
+          - 44e7c4de10ae50265753082e5dc76047 # Repack v3
+          - 5ab46ff851b76c337e13e81a4353875f # Internal
+        assign_scores_to:
+          - name: HQ
+    # Streaming Service
+      - trash_ids:
+          - d660701077794679fd59e8bdf4ce3a29 # AMZN
+          - f67c9ca88f463a48346062e8ad07713f # ATVP
+          - 36b72f59f4ea20aad9316f475f2d9fbb # DCU
+          - 89358767a60cc28783cdc3d0be9388a4 # DSNP
+          - 7a235133c87f7da4c8cccceca7e3c7a6 # HBO
+          - a880d6abc21e7c16884f3ae393f84179 # HMAX
+          - 81d1fbf600e2540cee87f3a23f9d3c1c # MAX
+          - f6cce30f1733d5c8194222a7507909bb # Hulu
+          - dc503e2425126fa1d0a9ad6168c83b3f # IP
+          - b2b980877494b560443631eb1f473867 # NLZ
+          - d34870697c9db575f17700212167be23 # NF
+          - 1656adc6d7bb2c8cca6acfb6592db421 # PCOK
+          - c67a75ae4a1715f2bb4d492755ba4195 # PMTP
+          - 3ac5d84fce98bab1b531393e9c82f467 # Qibi
+          - ae58039e1319178e6be73caab5c42166 # SHO
+          - c30d2958827d1867c73318a5a2957eb1 # RED
+          - 0ac24a2a68a9700bcb7eeca8e5cd644c # IT
+          - 77a7b25585c18af08f60b1547bb9b4fb # CC
+          - fcc09418f67ccaddcf3b641a22c5cfd7 # ALL4
+          - bbcaf03147de0f73be2be4a9078dfa03 # 4OD
+          - 43b3cf48cb385cd3eac608ee6bca7f09 # UHD Streaming Boost
+          - d2d299244a92b8a52d4921ce3897a256 # UHD Streaming Cut
+        assign_scores_to:
+          - name: HQ
+    ## Anime Good
+      - trash_ids:
+          - 949c16fe0a8147f50ba82cc2df9411c9 # Anime BD Tier 01 (Top SeaDex Muxers)
+          - ed7f1e315e000aef424a58517fa48727 # Anime BD Tier 02 (SeaDex Muxers)
+          - 096e406c92baa713da4a72d88030b815 # Anime BD Tier 03 (SeaDex Muxers)
+          - 30feba9da3030c5ed1e0f7d610bcadc4 # Anime BD Tier 04 (SeaDex Muxers)
+          - 545a76b14ddc349b8b185a6344e28b04 # Anime BD Tier 05 (Remuxes)
+          - 25d2afecab632b1582eaf03b63055f72 # Anime BD Tier 06 (FanSubs)
+          - 0329044e3d9137b08502a9f84a7e58db # Anime BD Tier 07 (P2P/Scene)
+          - c81bbfb47fed3d5a3ad027d077f889de # Anime BD Tier 08 (Mini Encodes)
+          - e0014372773c8f0e1bef8824f00c7dc4 # Anime Web Tier 01 (Muxers)
+          - 19180499de5ef2b84b6ec59aae444696 # Anime Web Tier 02 (Top FanSubs)
+          - c27f2ae6a4e82373b0f1da094e2489ad # Anime Web Tier 03 (Official Subs)
+          - 4fd5528a3a8024e6b49f9c67053ea5f3 # Anime Web Tier 04 (Official Subs)
+          - 29c2a13d091144f63307e4a8ce963a39 # Anime Web Tier 05 (FanSubs)
+          - dc262f88d74c651b12e9d90b39f6c753 # Anime Web Tier 06 (FanSubs)
+          - 273bd326df95955e1b6c26527d1df89b # v1
+          - 228b8ee9aa0a609463efca874524a6b8 # v2
+          - 0e5833d3af2cc5fa96a0c29cd4477feb # v3
+          - 4fc15eeb8f2f9a749f918217d4234ad8 # v4
+        assign_scores_to:
+          - name: HQ
+    ## Anime Bad
+      - trash_ids:
+          - b4a1b3d705159cdca36d71e57ca86871 # Anime Raws
+          - e3515e519f3b1360cbfc17651944354c # Anime LQ Groups
+          - d2d7b8a9d39413da5f44054080e028a3 # v0
+        assign_scores_to:
+          - name: HQ
+    # Unwanted
+      - trash_ids:
+          - 85c61753df5da1fb2aab6f2a47426b09 # BR-DISK
+          - 9c11cd3f07101cdba90a2d81cf0e56b4 # LQ
+          - e2315f990da2e2cbfc9fa5b7a6fcfe48 # LQ (Release Title)
+          - fbcb31d8dabd2a319072b84fc0b7249c # Extras
+        assign_scores_to:
+          - name: HQ
+    # Custom-200
+      - trash_ids:
+          - b2550eb333d27b75833e25b8c2557b38 # 10bit
+          - 1bd69272e23c5e6c5b1d6c8a36fce95e # HFR
+          - 9c14d194486c4014d422adc64092d794 # Dubs Only
+        assign_scores_to:
+          - name: HQ
+            score: 200
+    # Custom-2000
+      - trash_ids:
+          - cddfb4e32db826151d97352b8e37c648 # x264
+          - 026d5aadd1a6b4e550b134cb6c72b3ca # Uncensored
+        assign_scores_to:
+          - name: Remux
+            score: 3000
+          - name: 1080p
+            score: 3000
+          - name: 720p
+            score: 3000
+    # Custom-4000
+      - trash_ids:
+          - 418f50b10f1907201b6cfdf881f467b7 # Dual Audio
+          - 7ba05c6e0e14e793538174c679126996 # Multi
+        assign_scores_to:
+          - name: Remux
+            score: 4000
+          - name: 1080p
+            score: 4000
+          - name: 720p
+            score: 4000
