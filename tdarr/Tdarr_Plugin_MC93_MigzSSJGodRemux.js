@@ -134,6 +134,20 @@ function details() {
                  \\nExample:\\n
                  false`,
       },
+      {
+        name: 'remove_attachments',
+        type: 'string',
+        defaultValue: '',
+        inputUI: {
+          type: 'text',
+        },
+        tooltip: `Specify if any attachment streams should be removed. Optional.
+                 \\nExample:\\n
+                 true
+    
+                 \\nExample:\\n
+                 false`,
+      },
     ],
   };
 }
@@ -186,6 +200,7 @@ function plugin(file, librarySettings, inputs) {
   var has2Channel = false;
   var has6Channel = false;
   var has8Channel = false;
+  var attachmentStreamFound = false;
 
 
   // Check if inputs.custom_title_matching has been configured. If it has then set variable
@@ -243,6 +258,23 @@ function plugin(file, librarySettings, inputs) {
       convert = true;
     } catch (err) {}
   }
+
+  // Check if inputs.remove_attachments is set to true AND if stream is attachment stream. Removing any streams that are applicable.
+  if (inputs.remove_attachments.toLowerCase() == "true") {
+      for (var i = 0; i < file.ffProbeData.streams.length; i += 1)
+        try {
+          if (
+            file.ffProbeData.streams[i].codec_type.toLowerCase() == "attachment"
+          ) {
+            attachmentStreamFound = true;
+            convert = true;
+          }
+        } catch (err) {}
+      if (attachmentStreamFound == true) {
+        response.infoLog += `☒Attachment stream was found and input is set to remove.\n`;
+        ffmpegCommandInsert += `-map -0:t `;
+      }
+    }
 
   // Go through each stream in the file.
   for (var i = 0; i < file.ffProbeData.streams.length; i += 1) {
@@ -618,7 +650,7 @@ function plugin(file, librarySettings, inputs) {
           .includes('brazil'))
       ) {
         ffmpegCommandInsert += `-map -0:s:${subtitleIdx} `;
-        response.infoLog += `☒Subtitle stream 0:s:${subtitleIdx} detected as being brazilliant instead of portuguese, removing. \n`;
+        response.infoLog += `☒Subtitle stream 0:s:${subtitleIdx} detected as being brazillian instead of portuguese, removing. \n`;
         convert = true;
       }
     } catch (err) {
@@ -665,6 +697,8 @@ function plugin(file, librarySettings, inputs) {
     }
 
   }
+
+
 
   // Failsafe to cancel processing if all streams would be removed following this plugin. We don't want no audio.
   if (audioStreamsRemoved == audioStreamCount) {
